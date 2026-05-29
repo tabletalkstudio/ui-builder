@@ -140,6 +140,7 @@ export function ImageFrame() {
           secondaryType={state.overlay.secondaryType}
           cardVisible={state.overlay.cardVisible}
           shadowEnabled={state.overlay.shadowEnabled}
+          iconName={state.overlay.iconName}
           onMove={(nx, ny) =>
             dispatch({ type: "setOverlay", patch: { x: nx, y: ny } })
           }

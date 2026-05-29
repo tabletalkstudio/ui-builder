@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useEmbed, useEmbedDispatch } from "../state.embed";
 import { minScaleForCover } from "../lib/clampOffsets";
 import { serializeSnippet } from "../lib/serializeSnippet";
+import { IconPicker } from "./IconPicker";
+import { DEFAULT_ICON_FOR_TYPE } from "../lib/iconRegistry";
 
 type Props = {
   onClearSelection: () => void;
@@ -186,6 +188,18 @@ export function EmbedControlPanel({ onClearSelection }: Props) {
                 }
               />
             </label>
+            <div className="field-block">
+              <span className="field-label">Chip icon</span>
+              <IconPicker
+                value={state.overlay.iconName}
+                defaultForType={
+                  DEFAULT_ICON_FOR_TYPE[state.overlay.secondaryType] ?? "image"
+                }
+                onChange={(iconName) =>
+                  dispatch({ type: "setOverlay", patch: { iconName } })
+                }
+              />
+            </div>
             <label>
               Label text
               <input

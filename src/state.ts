@@ -52,6 +52,7 @@ export type ComposerState = {
     theme: Theme;
     size: OverlaySize;
     secondaryType: SecondaryType;
+    iconName: string | null;
   };
 };
 
@@ -70,6 +71,7 @@ export const initialState: ComposerState = {
     theme: "light",
     size: "M",
     secondaryType: "single-image",
+    iconName: null,
   },
 };
 
@@ -132,13 +134,17 @@ export function reducer(state: ComposerState, action: Action): ComposerState {
       let patch = action.patch;
       if (
         patch.secondaryType &&
-        patch.secondaryType !== state.overlay.secondaryType &&
-        patch.chipText === undefined
+        patch.secondaryType !== state.overlay.secondaryType
       ) {
-        patch = {
-          ...patch,
-          chipText: DEFAULT_CHIP_TEXT[patch.secondaryType],
-        };
+        if (patch.chipText === undefined) {
+          patch = {
+            ...patch,
+            chipText: DEFAULT_CHIP_TEXT[patch.secondaryType],
+          };
+        }
+        if (patch.iconName === undefined) {
+          patch = { ...patch, iconName: null };
+        }
       }
       return { ...state, overlay: { ...state.overlay, ...patch } };
     }

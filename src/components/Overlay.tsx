@@ -1,4 +1,5 @@
 import { useRef, type RefObject } from "react";
+import { DEFAULT_ICON_FOR_TYPE, getIcon } from "../lib/iconRegistry";
 
 export type SecondaryType =
   | "single-image"
@@ -22,12 +23,13 @@ export type OverlayProps = {
   cardVisible: boolean;
   /** Whether to apply the soft drop shadow on the overlay. */
   shadowEnabled: boolean;
+  /** Icon name override; falls back to default for the type. */
+  iconName: string | null;
   onMove: (x: number, y: number) => void;
 };
 
-/* ---- Icons. One per secondaryType. All sized via currentColor + 1em-ish. ---- */
-
-const ImageIcon = () => (
+/* ---- Generic placeholder image swatch icon. Lives in the card body. ---- */
+const SwatchIcon = () => (
   <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.2" />
     <circle cx="5.5" cy="6.5" r="1.2" fill="currentColor" />
@@ -35,52 +37,19 @@ const ImageIcon = () => (
   </svg>
 );
 
-const PencilIcon = () => (
-  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M11 2L14 5L5.5 13.5L2 14L2.5 10.5L11 2Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-    <path d="M9.5 3.5L12.5 6.5" stroke="currentColor" strokeWidth="1.2" />
-  </svg>
-);
-
-const ImagesIcon = () => (
-  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="3.5" y="4.5" width="10" height="8" rx="1.2" stroke="currentColor" strokeWidth="1.2" />
-    <rect x="1.5" y="2.5" width="10" height="8" rx="1.2" stroke="currentColor" strokeWidth="1.2" fill="var(--pec-bg)" />
-    <circle cx="4" cy="5" r="0.9" fill="currentColor" />
-    <path d="M2 9L5 6.5L7.5 8.5L9 7.5L11 9" stroke="currentColor" strokeWidth="1.0" strokeLinejoin="round" />
-  </svg>
-);
-
-const LayersIcon = () => (
-  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8 1.5L14.5 5L8 8.5L1.5 5L8 1.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-    <path d="M2 8.5L8 11.5L14 8.5" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-    <path d="M2 11.5L8 14.5L14 11.5" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
-  </svg>
-);
-
-const GenerateIcon = () => (
-  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 3L4 6M2.5 4.5L5.5 4.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-    <path d="M11 8L11 13M8.5 10.5L13.5 10.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-    <path d="M9 1L10 3L12 4L10 5L9 7L8 5L6 4L8 3L9 1Z" fill="currentColor" />
-  </svg>
-);
-
-function ChipIcon({ type }: { type: SecondaryType }) {
-  switch (type) {
-    case "signature":
-      return <PencilIcon />;
-    case "images":
-      return <ImagesIcon />;
-    case "layers":
-      return <LayersIcon />;
-    case "text-prompt":
-      return <GenerateIcon />;
-    case "single-image":
-    default:
-      return <ImageIcon />;
-  }
+function ChipIcon({
+  iconName,
+  secondaryType,
+}: {
+  iconName: string | null;
+  secondaryType: SecondaryType;
+}) {
+  const effectiveName =
+    iconName ?? DEFAULT_ICON_FOR_TYPE[secondaryType] ?? "image";
+  const entry = getIcon(effectiveName);
+  if (!entry) return null;
+  const Cmp = entry.Component;
+  return <Cmp width="1em" height="1em" />;
 }
 
 /* ---- Card content per type. ---- */
@@ -94,17 +63,16 @@ function CardContent({
 }) {
   switch (type) {
     case "signature":
-      // Card is just a large swatch — no text label.
-      return <div className="pec-swatch pec-swatch--wide"><ImageIcon /></div>;
+      return <div className="pec-swatch pec-swatch--wide"><SwatchIcon /></div>;
 
     case "images":
       return (
         <>
           <span className="pec-label">{labelText}</span>
           <div className="pec-swatch-row">
-            <div className="pec-swatch pec-swatch--sm"><ImageIcon /></div>
-            <div className="pec-swatch pec-swatch--sm"><ImageIcon /></div>
-            <div className="pec-swatch pec-swatch--sm"><ImageIcon /></div>
+            <div className="pec-swatch pec-swatch--sm"><SwatchIcon /></div>
+            <div className="pec-swatch pec-swatch--sm"><SwatchIcon /></div>
+            <div className="pec-swatch pec-swatch--sm"><SwatchIcon /></div>
           </div>
         </>
       );
@@ -114,7 +82,7 @@ function CardContent({
         <div className="pec-layer-list">
           {[0, 1, 2].map((i) => (
             <div key={i} className="pec-layer-row">
-              <div className="pec-swatch pec-swatch--thumb"><ImageIcon /></div>
+              <div className="pec-swatch pec-swatch--thumb"><SwatchIcon /></div>
               <span className="pec-layer-name">Layer Name</span>
             </div>
           ))}
@@ -122,7 +90,6 @@ function CardContent({
       );
 
     case "text-prompt":
-      // The "card" is an input-style rounded rect, no padding for a label.
       return <span className="pec-prompt-text">{labelText || "text prompt"}</span>;
 
     case "single-image":
@@ -130,7 +97,7 @@ function CardContent({
       return (
         <>
           <span className="pec-label">{labelText}</span>
-          <div className="pec-swatch"><ImageIcon /></div>
+          <div className="pec-swatch"><SwatchIcon /></div>
         </>
       );
   }
@@ -147,6 +114,7 @@ export function Overlay({
   secondaryType,
   cardVisible,
   shadowEnabled,
+  iconName,
   onMove,
 }: OverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -202,7 +170,7 @@ export function Overlay({
       onPointerCancel={onPointerUp}
     >
       <div className="pec-chip">
-        <ChipIcon type={secondaryType} />
+        <ChipIcon iconName={iconName} secondaryType={secondaryType} />
         <span>{chipText}</span>
       </div>
       {cardVisible && (

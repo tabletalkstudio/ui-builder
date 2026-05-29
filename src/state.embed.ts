@@ -57,6 +57,8 @@ export type EmbedState = {
     theme: Theme;
     size: OverlaySize;
     secondaryType: SecondaryType;
+    /** Lucide icon name (kebab-case). null = use default for secondaryType. */
+    iconName: string | null;
   };
 };
 
@@ -77,6 +79,7 @@ export const initialEmbedState: EmbedState = {
     theme: "light",
     size: "M",
     secondaryType: "single-image",
+    iconName: null,
   },
 };
 
@@ -137,17 +140,21 @@ export function embedReducer(
       };
     case "setOverlay": {
       let patch = action.patch;
-      // When the user changes secondary type, reset the chip text to the
-      // type's default (unless the patch also explicitly sets chipText).
+      // When the user changes secondary type, reset chip text + icon to the
+      // type's defaults (unless the patch overrides them explicitly).
       if (
         patch.secondaryType &&
-        patch.secondaryType !== state.overlay.secondaryType &&
-        patch.chipText === undefined
+        patch.secondaryType !== state.overlay.secondaryType
       ) {
-        patch = {
-          ...patch,
-          chipText: DEFAULT_CHIP_TEXT[patch.secondaryType],
-        };
+        if (patch.chipText === undefined) {
+          patch = {
+            ...patch,
+            chipText: DEFAULT_CHIP_TEXT[patch.secondaryType],
+          };
+        }
+        if (patch.iconName === undefined) {
+          patch = { ...patch, iconName: null };
+        }
       }
       return { ...state, overlay: { ...state.overlay, ...patch } };
     }

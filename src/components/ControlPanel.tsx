@@ -1,4 +1,6 @@
 import { useComposer, useDispatch, minScaleForCover } from "../state";
+import { IconPicker } from "./IconPicker";
+import { DEFAULT_ICON_FOR_TYPE } from "../lib/iconRegistry";
 
 export function ControlPanel() {
   const state = useComposer();
@@ -149,6 +151,16 @@ export function ControlPanel() {
             }
           />
         </label>
+        <div className="field-block">
+          <span className="field-label">Chip icon</span>
+          <IconPicker
+            value={overlay.iconName}
+            defaultForType={DEFAULT_ICON_FOR_TYPE[overlay.secondaryType] ?? "image"}
+            onChange={(iconName) =>
+              dispatch({ type: "setOverlay", patch: { iconName } })
+            }
+          />
+        </div>
         <label>
           Label text
           <input
