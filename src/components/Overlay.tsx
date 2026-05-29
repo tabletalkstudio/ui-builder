@@ -1,7 +1,15 @@
 import { useRef, type RefObject } from "react";
-import { useComposer, useDispatch } from "../state";
 
-type Props = { frameRef: RefObject<HTMLDivElement | null> };
+export type OverlayProps = {
+  /** Element whose bounds we clamp the overlay drag to. */
+  frameRef: RefObject<HTMLElement | null>;
+  x: number;
+  y: number;
+  chipText: string;
+  labelText: string;
+  theme: "light" | "dark";
+  onMove: (x: number, y: number) => void;
+};
 
 const ImageIcon = () => (
   <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -24,9 +32,15 @@ const ImageIcon = () => (
   </svg>
 );
 
-export function Overlay({ frameRef }: Props) {
-  const state = useComposer();
-  const dispatch = useDispatch();
+export function Overlay({
+  frameRef,
+  x,
+  y,
+  chipText,
+  labelText,
+  theme,
+  onMove,
+}: OverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{
     active: boolean;
@@ -43,8 +57,8 @@ export function Overlay({ frameRef }: Props) {
       active: true,
       startX: e.clientX,
       startY: e.clientY,
-      baseX: state.overlay.x,
-      baseY: state.overlay.y,
+      baseX: x,
+      baseY: y,
     };
   };
 
@@ -62,7 +76,7 @@ export function Overlay({ frameRef }: Props) {
       nx = Math.min(Math.max(0, nx), Math.max(0, maxX));
       ny = Math.min(Math.max(0, ny), Math.max(0, maxY));
     }
-    dispatch({ type: "setOverlay", patch: { x: nx, y: ny } });
+    onMove(nx, ny);
   };
 
   const onPointerUp = () => {
@@ -72,8 +86,8 @@ export function Overlay({ frameRef }: Props) {
   return (
     <div
       ref={overlayRef}
-      className={`pec-overlay pec-draggable pec-theme-${state.overlay.theme}`}
-      style={{ left: state.overlay.x, top: state.overlay.y }}
+      className={`pec-overlay pec-draggable pec-theme-${theme}`}
+      style={{ left: x, top: y }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
@@ -81,10 +95,10 @@ export function Overlay({ frameRef }: Props) {
     >
       <div className="pec-chip">
         <ImageIcon />
-        <span>{state.overlay.chipText}</span>
+        <span>{chipText}</span>
       </div>
       <div className="pec-card">
-        <span className="pec-label">{state.overlay.labelText}</span>
+        <span className="pec-label">{labelText}</span>
         <div className="pec-swatch">
           <ImageIcon />
         </div>

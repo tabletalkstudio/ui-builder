@@ -136,12 +136,5 @@ export function useDispatch() {
   return useContext(DispatchCtx);
 }
 
-export function minScaleForCover(
-  imgW: number,
-  imgH: number,
-  frameW: number,
-  frameH: number,
-): number {
-  if (imgW === 0 || imgH === 0) return 1;
-  return Math.max(frameW / imgW, frameH / imgH);
-}
+// Re-exported from the canonical location for backwards compatibility.
+export { minScaleForCover } from "./lib/clampOffsets";

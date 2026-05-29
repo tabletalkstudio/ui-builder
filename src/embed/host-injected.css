@@ -1,0 +1,53 @@
+/* Styles injected into the host page's document.head when the bookmarklet is active.
+ * Two concerns:
+ *   1. Push host content over by the sidebar width (via html margin).
+ *   2. Outline images on hover in "pick mode" so the user knows what they're selecting.
+ *   3. Style the wrapper we insert around a selected image.
+ *
+ * Everything is prefixed `__uib-` to minimize collisions with host page CSS.
+ */
+
+html.__uib-shifted {
+  margin-right: 360px !important;
+  transition: margin-right 0.18s ease-out;
+}
+
+html.__uib-shifted.__uib-collapsed {
+  margin-right: 36px !important;
+}
+
+/* Hover highlight on host images while pick mode is active.
+   We add the class via JS only when pick mode is on, so no permanent change. */
+body.__uib-pick-mode img:not(.__uib-selected):hover {
+  outline: 2px solid #1a73e8 !important;
+  outline-offset: 2px !important;
+  cursor: crosshair !important;
+}
+
+body.__uib-pick-mode img.__uib-selected {
+  outline: 2px solid #1a73e8 !important;
+  outline-offset: 2px !important;
+}
+
+/* Wrapper we insert around the selected image. */
+.__uib-wrapper {
+  position: relative !important;
+  overflow: hidden !important;
+  display: inline-block !important;
+  vertical-align: top;
+  box-sizing: content-box !important;
+}
+
+.__uib-wrapper > img.__uib-managed {
+  display: block !important;
+  max-width: none !important;
+  max-height: none !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: none !important;
+  user-select: none !important;
+  -webkit-user-drag: none !important;
+}

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { useComposer, useDispatch, minScaleForCover } from "../state";
+import { useComposer, useDispatch } from "../state";
+import { clampOffsets, minScaleForCover } from "../lib/clampOffsets";
 import { Overlay } from "./Overlay";
 import { useUpload } from "./UploadProvider";
 
@@ -31,17 +32,6 @@ export function ImageFrame() {
     }
   }, [minScale, imageTransform.scale, image.src, dispatch]);
 
-  const clampOffsets = (offsetX: number, offsetY: number, scale: number) => {
-    const scaledW = image.naturalW * scale;
-    const scaledH = image.naturalH * scale;
-    const minX = frame.w - scaledW;
-    const minY = frame.h - scaledH;
-    return {
-      x: Math.min(0, Math.max(minX, offsetX)),
-      y: Math.min(0, Math.max(minY, offsetY)),
-    };
-  };
-
   const onPointerDown = (e: React.PointerEvent) => {
     if (!image.src) return;
     (e.target as Element).setPointerCapture(e.pointerId);
@@ -63,6 +53,10 @@ export function ImageFrame() {
       d.baseX + dx,
       d.baseY + dy,
       imageTransform.scale,
+      image.naturalW,
+      image.naturalH,
+      frame.w,
+      frame.h,
     );
     dispatch({ type: "setImageTransform", offsetX: x, offsetY: y });
   };
@@ -134,7 +128,19 @@ export function ImageFrame() {
           </button>
         </div>
       )}
-      {image.src && state.overlay.visible && <Overlay frameRef={frameRef} />}
+      {image.src && state.overlay.visible && (
+        <Overlay
+          frameRef={frameRef}
+          x={state.overlay.x}
+          y={state.overlay.y}
+          chipText={state.overlay.chipText}
+          labelText={state.overlay.labelText}
+          theme={state.overlay.theme}
+          onMove={(nx, ny) =>
+            dispatch({ type: "setOverlay", patch: { x: nx, y: ny } })
+          }
+        />
+      )}
     </div>
   );
 }

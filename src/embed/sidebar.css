@@ -1,0 +1,163 @@
+/* Styles applied INSIDE the sidebar's shadow root.
+ * Isolated from host page CSS thanks to :host { all: initial }.
+ */
+
+.uib-shell {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 360px;
+  background: #ffffff;
+  color: #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: row;
+  transition: width 0.18s ease-out;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.uib-shell.is-collapsed {
+  width: 36px;
+}
+
+.uib-shell.is-collapsed .uib-content {
+  display: none;
+}
+
+.uib-collapse-btn {
+  flex-shrink: 0;
+  width: 36px;
+  background: #f5f5f5;
+  border: none;
+  border-right: 1px solid #e0e0e0;
+  cursor: pointer;
+  font-size: 18px;
+  color: #555;
+  font-family: inherit;
+  padding: 0;
+}
+.uib-collapse-btn:hover { background: #ebebeb; color: #1a1a1a; }
+
+.uib-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.uib-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.uib-header h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.uib-close-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #d0d0d0;
+  background: #ffffff;
+  color: #555;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  padding: 0;
+}
+.uib-close-btn:hover { background: #f5f5f5; color: #1a1a1a; }
+
+.uib-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.uib-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.uib-panel section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.uib-panel h4 {
+  margin: 0 0 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666;
+  font-weight: 600;
+}
+.uib-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #333;
+}
+.uib-panel label.row {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.uib-panel input[type="number"],
+.uib-panel input[type="text"],
+.uib-panel select {
+  border: 1px solid #d0d0d0;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  background: #ffffff;
+  color: #1a1a1a;
+}
+.uib-panel input[type="range"] {
+  width: 100%;
+}
+.uib-panel .value {
+  font-size: 11px;
+  color: #888;
+}
+.uib-panel .hint {
+  font-size: 11px;
+  color: #888;
+  margin: 0;
+  line-height: 1.4;
+}
+.uib-panel button {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+  background: #ffffff;
+  color: #1a1a1a;
+  cursor: pointer;
+}
+.uib-panel button:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+.uib-panel button.primary {
+  background: #1a1a1a;
+  color: #ffffff;
+  border-color: #1a1a1a;
+}
+.uib-panel button.primary:hover:not(:disabled) {
+  background: #333;
+}
