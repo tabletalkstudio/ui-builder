@@ -12,8 +12,13 @@ echo "→ Building…"
 npm run build
 
 echo "→ Deploying preview…"
-# Capture the deployment URL from Vercel's stdout (last URL printed).
-DEPLOY_URL=$(npx vercel deploy --yes 2>&1 | tee /dev/tty | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | tail -1)
+# Capture vercel output to a temp file so we can both display it and parse
+# the deployment URL out of it. (We can't use `tee /dev/tty` because that
+# fails when stdout isn't a terminal — e.g., when invoked from a non-TTY shell.)
+TMP=$(mktemp -t deploy-stage.XXXXXX)
+trap 'rm -f "$TMP"' EXIT
+npx vercel deploy --yes 2>&1 | tee "$TMP"
+DEPLOY_URL=$(grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' "$TMP" | tail -1)
 
 if [ -z "$DEPLOY_URL" ]; then
   echo "✗ Could not parse deployment URL from Vercel output." >&2
