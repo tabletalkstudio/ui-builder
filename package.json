@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build && vite build --config vite.embed.config.ts",
     "build:spa": "tsc -b && vite build",
     "build:embed": "vite build --config vite.embed.config.ts",
+    "deploy:stage": "bash scripts/deploy-stage.sh",
+    "deploy:prod": "npm run build && vercel --prod --yes",
     "lint": "eslint .",
     "preview": "vite preview"
   },
