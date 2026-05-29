@@ -208,6 +208,9 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .uib-icon-search {
   width: 100%;
@@ -234,7 +237,9 @@
 }
 .uib-icon-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  /* Responsive — wraps to fewer columns when the popover gets narrow,
+     instead of clipping the rightmost tiles. */
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
   gap: 4px;
 }
 .uib-icon-tile {

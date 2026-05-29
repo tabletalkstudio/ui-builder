@@ -332,6 +332,9 @@ button.primary:hover:not(:disabled) {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 .uib-icon-search { width: 100%; }
 .uib-icon-reset { font-size: 11px; padding: 4px 8px; }
@@ -347,7 +350,7 @@ button.primary:hover:not(:disabled) {
 }
 .uib-icon-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
   gap: 4px;
 }
 .uib-icon-tile {
