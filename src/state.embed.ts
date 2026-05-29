@@ -33,6 +33,7 @@ export type EmbedState = {
   imageTransform: { offsetX: number; offsetY: number; scale: number };
   overlay: {
     visible: boolean;
+    cardVisible: boolean;
     x: number;
     y: number;
     chipText: string;
@@ -49,6 +50,7 @@ export const initialEmbedState: EmbedState = {
   imageTransform: { offsetX: 0, offsetY: 0, scale: 1 },
   overlay: {
     visible: true,
+    cardVisible: true,
     x: 12,
     y: 12,
     chipText: "Primary container",

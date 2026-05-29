@@ -145,6 +145,20 @@ export function EmbedControlPanel({ onClearSelection }: Props) {
               />
               Show overlay
             </label>
+            <label className="row">
+              <input
+                type="checkbox"
+                checked={state.overlay.cardVisible}
+                disabled={!state.overlay.visible}
+                onChange={(e) =>
+                  dispatch({
+                    type: "setOverlay",
+                    patch: { cardVisible: e.target.checked },
+                  })
+                }
+              />
+              Show card (second box)
+            </label>
             <label>
               Chip text
               <input

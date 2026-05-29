@@ -63,7 +63,7 @@
   background: var(--pec-bg);
   color: var(--pec-fg);
   border: 1px solid var(--pec-border);
-  border-radius: 999px;
+  border-radius: 9px;
   font-size: 14px;
   line-height: 1;
   white-space: nowrap;
@@ -84,7 +84,7 @@
   background: var(--pec-bg);
   color: var(--pec-fg);
   border: 1px solid var(--pec-border);
-  border-radius: 12px;
+  border-radius: 11px;
   min-width: 160px;
 }
 

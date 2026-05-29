@@ -27,14 +27,18 @@ export function serializeSnippet(state: EmbedState): {
   const { borderRadius } = state.frame;
   const { displayW, displayH, naturalW, naturalH } = sel;
 
-  const overlayBlock = state.overlay.visible
+  const cardBlock = state.overlay.cardVisible
     ? `
-  <div class="pec-overlay pec-theme-${state.overlay.theme}" style="position:absolute;left:${state.overlay.x}px;top:${state.overlay.y}px;">
-    <div class="pec-chip">${ICON_SVG}<span>${escapeHtml(state.overlay.chipText)}</span></div>
     <div class="pec-card">
       <span class="pec-label">${escapeHtml(state.overlay.labelText)}</span>
       <div class="pec-swatch">${ICON_SVG}</div>
-    </div>
+    </div>`
+    : "";
+
+  const overlayBlock = state.overlay.visible
+    ? `
+  <div class="pec-overlay pec-theme-${state.overlay.theme}" style="position:absolute;left:${state.overlay.x}px;top:${state.overlay.y}px;">
+    <div class="pec-chip">${ICON_SVG}<span>${escapeHtml(state.overlay.chipText)}</span></div>${cardBlock}
   </div>`
     : "";
 

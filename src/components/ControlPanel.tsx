@@ -108,6 +108,20 @@ export function ControlPanel() {
           />
           Show overlay
         </label>
+        <label className="row">
+          <input
+            type="checkbox"
+            checked={overlay.cardVisible}
+            disabled={!overlay.visible}
+            onChange={(e) =>
+              dispatch({
+                type: "setOverlay",
+                patch: { cardVisible: e.target.checked },
+              })
+            }
+          />
+          Show card (second box)
+        </label>
         <label>
           Chip text
           <input

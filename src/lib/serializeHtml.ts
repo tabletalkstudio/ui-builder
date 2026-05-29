@@ -16,17 +16,21 @@ const imageIconSvg = `<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.
 export function serializeHtml(state: ComposerState): string {
   const { overlay } = state;
 
+  const cardHtml = overlay.cardVisible
+    ? `
+      <div class="pec-card">
+        <span class="pec-label">${escapeHtml(overlay.labelText)}</span>
+        <div class="pec-swatch">${imageIconSvg}</div>
+      </div>`
+    : "";
+
   const overlayHtml = overlay.visible
     ? `
     <div class="pec-overlay pec-theme-${overlay.theme}">
       <div class="pec-chip">
         ${imageIconSvg}
         <span>${escapeHtml(overlay.chipText)}</span>
-      </div>
-      <div class="pec-card">
-        <span class="pec-label">${escapeHtml(overlay.labelText)}</span>
-        <div class="pec-swatch">${imageIconSvg}</div>
-      </div>
+      </div>${cardHtml}
     </div>`
     : "";
 

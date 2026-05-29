@@ -8,6 +8,8 @@ export type OverlayProps = {
   chipText: string;
   labelText: string;
   theme: "light" | "dark";
+  /** When false, only the chip renders (no card below). */
+  cardVisible: boolean;
   onMove: (x: number, y: number) => void;
 };
 
@@ -39,6 +41,7 @@ export function Overlay({
   chipText,
   labelText,
   theme,
+  cardVisible,
   onMove,
 }: OverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -97,12 +100,14 @@ export function Overlay({
         <ImageIcon />
         <span>{chipText}</span>
       </div>
-      <div className="pec-card">
-        <span className="pec-label">{labelText}</span>
-        <div className="pec-swatch">
-          <ImageIcon />
+      {cardVisible && (
+        <div className="pec-card">
+          <span className="pec-label">{labelText}</span>
+          <div className="pec-swatch">
+            <ImageIcon />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

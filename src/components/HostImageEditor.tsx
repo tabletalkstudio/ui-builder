@@ -132,6 +132,7 @@ export function HostImageEditor() {
       chipText={state.overlay.chipText}
       labelText={state.overlay.labelText}
       theme={state.overlay.theme}
+      cardVisible={state.overlay.cardVisible}
       onMove={(nx, ny) =>
         dispatch({ type: "setOverlay", patch: { x: nx, y: ny } })
       }

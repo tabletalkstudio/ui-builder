@@ -29,6 +29,7 @@ export type ComposerState = {
   };
   overlay: {
     visible: boolean;
+    cardVisible: boolean;
     x: number;
     y: number;
     chipText: string;
@@ -44,6 +45,7 @@ export const initialState: ComposerState = {
   imageTransform: { offsetX: 0, offsetY: 0, scale: 1 },
   overlay: {
     visible: true,
+    cardVisible: true,
     x: 16,
     y: 16,
     chipText: "Primary container",
