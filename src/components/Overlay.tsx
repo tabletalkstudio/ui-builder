@@ -48,6 +48,28 @@ function ChipIcon({
     iconName ?? DEFAULT_ICON_FOR_TYPE[secondaryType] ?? "image";
   const entry = getIcon(effectiveName);
   if (!entry) return null;
+  if (entry.kind === "svg") {
+    const viewBox = entry.viewBox ?? "0 0 24 24";
+    const fillStrokeProps =
+      entry.mode === "stroke"
+        ? {
+            fill: "none" as const,
+            stroke: "currentColor",
+            strokeWidth: 2,
+            strokeLinecap: "round" as const,
+            strokeLinejoin: "round" as const,
+          }
+        : { fill: "currentColor" };
+    return (
+      <svg
+        viewBox={viewBox}
+        width="1em"
+        height="1em"
+        {...fillStrokeProps}
+        dangerouslySetInnerHTML={{ __html: entry.svg }}
+      />
+    );
+  }
   const Cmp = entry.Component;
   return <Cmp width="1em" height="1em" />;
 }

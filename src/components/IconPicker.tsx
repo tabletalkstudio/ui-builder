@@ -3,7 +3,42 @@ import {
   ICON_CATEGORIES,
   getIcon,
   DEFAULT_ICON_FOR_TYPE,
+  type IconEntry,
 } from "../lib/iconRegistry";
+
+/** Render any registry icon at the given size. */
+function RegistryIcon({
+  entry,
+  size,
+}: {
+  entry: IconEntry;
+  size: number | string;
+}) {
+  if (entry.kind === "svg") {
+    const viewBox = entry.viewBox ?? "0 0 24 24";
+    const props =
+      entry.mode === "stroke"
+        ? {
+            fill: "none" as const,
+            stroke: "currentColor",
+            strokeWidth: 2,
+            strokeLinecap: "round" as const,
+            strokeLinejoin: "round" as const,
+          }
+        : { fill: "currentColor" };
+    return (
+      <svg
+        viewBox={viewBox}
+        width={size}
+        height={size}
+        {...props}
+        dangerouslySetInnerHTML={{ __html: entry.svg }}
+      />
+    );
+  }
+  const Cmp = entry.Component;
+  return <Cmp width={size} height={size} />;
+}
 
 type Props = {
   /** Current selection. null means "use default for type". */
@@ -32,7 +67,6 @@ export function IconPicker({ value, defaultForType, onChange }: Props) {
 
   const effectiveName = value ?? defaultForType;
   const currentEntry = getIcon(effectiveName);
-  const CurrentCmp = currentEntry?.Component;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -55,7 +89,7 @@ export function IconPicker({ value, defaultForType, onChange }: Props) {
         onClick={() => setOpen((v) => !v)}
         title={currentEntry?.label}
       >
-        {CurrentCmp && <CurrentCmp width={18} height={18} />}
+        {currentEntry && <RegistryIcon entry={currentEntry} size={18} />}
         <span className="uib-icon-trigger-label">
           {value === null
             ? `Default (${currentEntry?.label ?? effectiveName})`
@@ -94,7 +128,6 @@ export function IconPicker({ value, defaultForType, onChange }: Props) {
                   <h5 className="uib-icon-cat-name">{cat.name}</h5>
                   <div className="uib-icon-grid">
                     {cat.icons.map((icon) => {
-                      const Cmp = icon.Component;
                       const selected = effectiveName === icon.name;
                       return (
                         <button
@@ -107,7 +140,7 @@ export function IconPicker({ value, defaultForType, onChange }: Props) {
                             setOpen(false);
                           }}
                         >
-                          <Cmp width={20} height={20} />
+                          <RegistryIcon entry={icon} size={20} />
                         </button>
                       );
                     })}
