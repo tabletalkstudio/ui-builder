@@ -25,9 +25,8 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  gap: 14px;
   user-select: none;
-  /* Per-size scale applied via pec-size-* class below. */
+  /* Per-size scale + gap + corner radii applied via pec-size-* class below. */
   --pec-scale: 1;
 }
 
@@ -60,11 +59,35 @@
   --pec-divider: rgba(255, 255, 255, 0.08);
 }
 
-/* Sizes — uniform-scale multiplier applied to spacing + font dimensions. */
-.pec-overlay.pec-size-s { --pec-scale: 0.85; }
-.pec-overlay.pec-size-m { --pec-scale: 1; }
-.pec-overlay.pec-size-l { --pec-scale: 1.13; }
-.pec-overlay.pec-size-xl { --pec-scale: 1.27; }
+/* Sizes — explicit per-size gap + corner radii, plus a uniform scale
+   variable that drives padding, font-size, and swatch dimensions. */
+.pec-overlay.pec-size-s {
+  --pec-scale: 0.85;
+  gap: 8px;
+}
+.pec-overlay.pec-size-s .pec-chip { border-radius: 8px; }
+.pec-overlay.pec-size-s .pec-card { border-radius: 8px; }
+
+.pec-overlay.pec-size-m {
+  --pec-scale: 1;
+  gap: 10px;
+}
+.pec-overlay.pec-size-m .pec-chip { border-radius: 9px; }
+.pec-overlay.pec-size-m .pec-card { border-radius: 9px; }
+
+.pec-overlay.pec-size-l {
+  --pec-scale: 1.13;
+  gap: 12px;
+}
+.pec-overlay.pec-size-l .pec-chip { border-radius: 9px; }
+.pec-overlay.pec-size-l .pec-card { border-radius: 10px; }
+
+.pec-overlay.pec-size-xl {
+  --pec-scale: 1.27;
+  gap: 14px;
+}
+.pec-overlay.pec-size-xl .pec-chip { border-radius: 9px; }
+.pec-overlay.pec-size-xl .pec-card { border-radius: 10px; }
 
 /* --- Chip --- */
 .pec-chip {
@@ -76,7 +99,7 @@
   background: var(--pec-bg);
   color: var(--pec-fg);
   border: 1px solid var(--pec-border);
-  border-radius: 9px;
+  /* border-radius set per size via .pec-overlay.pec-size-*. */
   font-size: calc(14px * var(--pec-scale));
   line-height: 1;
   white-space: nowrap;
@@ -97,7 +120,7 @@
   background: var(--pec-bg);
   color: var(--pec-fg);
   border: 1px solid var(--pec-border);
-  border-radius: 11px;
+  /* border-radius set per size via .pec-overlay.pec-size-*. */
   min-width: calc(160px * var(--pec-scale));
 }
 
