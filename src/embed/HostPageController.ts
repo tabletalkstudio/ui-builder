@@ -70,15 +70,56 @@ export function installHostPageIntegration(
     const originalParent = img.parentNode!;
     const originalNextSibling = img.nextSibling;
 
+    const naturalW = img.naturalWidth;
+    const naturalH = img.naturalHeight;
+    const displayW = rect.width;
+    const displayH = rect.height;
+
+    // Inspect the host's actual object-fit so we reproduce its visual.
+    //   cover / fill (default) → cover scale (max ratio)
+    //   contain / scale-down  → contain scale (min ratio)
+    //   none                  → 1:1 (image at natural size, centered)
+    const objectFit =
+      window.getComputedStyle(img).objectFit || "fill";
+    let scale: number;
+    if (naturalW === 0 || naturalH === 0) {
+      scale = 1;
+    } else if (objectFit === "contain" || objectFit === "scale-down") {
+      scale = Math.min(displayW / naturalW, displayH / naturalH);
+      // scale-down never enlarges
+      if (objectFit === "scale-down") scale = Math.min(scale, 1);
+    } else if (objectFit === "none") {
+      scale = 1;
+    } else {
+      // "fill" (default) and "cover" — best uniform match is cover scale.
+      scale = Math.max(displayW / naturalW, displayH / naturalH);
+    }
+    const offsetX = (displayW - naturalW * scale) / 2;
+    const offsetY = (displayH - naturalH * scale) / 2;
+
     const wrapper = document.createElement("div");
     wrapper.className = "__uib-wrapper";
-    wrapper.style.width = rect.width + "px";
-    wrapper.style.height = rect.height + "px";
+    wrapper.style.width = displayW + "px";
+    wrapper.style.height = displayH + "px";
 
     // Replace the img's place in the DOM with the wrapper, then move the img inside.
     originalParent.insertBefore(wrapper, img);
     wrapper.appendChild(img);
     img.classList.add("__uib-managed", "__uib-selected");
+
+    // Pre-apply the initial transform synchronously, before React renders.
+    // Without this, the .__uib-managed CSS rules (width: auto / height: auto)
+    // cause the image to paint at its natural size for one frame, which
+    // looks like a brief zoom-in/crop flash.
+    if (naturalW > 0 && naturalH > 0) {
+      img.style.position = "absolute";
+      img.style.left = "0";
+      img.style.top = "0";
+      img.style.width = naturalW + "px";
+      img.style.height = naturalH + "px";
+      img.style.transformOrigin = "0 0";
+      img.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+    }
 
     return {
       el: img,
@@ -86,10 +127,11 @@ export function installHostPageIntegration(
       originalSrc,
       originalParent,
       originalNextSibling,
-      naturalW: img.naturalWidth,
-      naturalH: img.naturalHeight,
-      displayW: rect.width,
-      displayH: rect.height,
+      naturalW,
+      naturalH,
+      displayW,
+      displayH,
+      initialTransform: { offsetX, offsetY, scale },
     };
   };
 

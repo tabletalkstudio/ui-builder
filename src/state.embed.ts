@@ -6,7 +6,6 @@ import {
   type ReactNode,
 } from "react";
 import { createElement } from "react";
-import { coverFitTransform } from "./lib/clampOffsets";
 
 export type Theme = "light" | "dark";
 export type OverlaySize = "XL" | "L" | "M" | "S";
@@ -38,6 +37,10 @@ export type Selection = {
   /** Rendered dimensions at the moment we selected. */
   displayW: number;
   displayH: number;
+  /** Scale/offsets that reproduce the image's pre-click visual, derived from
+   *  the host's computed object-fit. Used to seed imageTransform so there's
+   *  no zoom/crop jump on selection. */
+  initialTransform: { offsetX: number; offsetY: number; scale: number };
 };
 
 export type EmbedState = {
@@ -105,17 +108,12 @@ export function embedReducer(
       return {
         ...state,
         selection: action.selection,
-        // Reset per-selection transforms when changing image. Start at the
-        // cover-fit transform so the image looks identical to how it was
-        // already rendered on the host page (no zoom/crop jump on click).
+        // Seed the transform from selection.initialTransform — computed
+        // from the host image's actual object-fit so the visual matches
+        // exactly what the user saw before clicking.
         swapSrc: null,
         imageTransform: action.selection
-          ? coverFitTransform(
-              action.selection.naturalW,
-              action.selection.naturalH,
-              action.selection.displayW,
-              action.selection.displayH,
-            )
+          ? action.selection.initialTransform
           : { offsetX: 0, offsetY: 0, scale: 1 },
         frame: { borderRadius: state.frame.borderRadius },
       };
