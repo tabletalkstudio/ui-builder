@@ -1,0 +1,110 @@
+/* Shared rules for live editor + exported HTML. Class names MUST stay in sync. */
+
+.pec-composer {
+  position: relative;
+  display: inline-block;
+  font-family: "Adobe Clean", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+.pec-frame {
+  position: relative;
+  overflow: hidden;
+  background: #f3f3f3;
+}
+
+.pec-frame img.pec-cropped {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pec-overlay {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  user-select: none;
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.25));
+}
+
+.pec-overlay.pec-draggable {
+  cursor: grab;
+}
+
+.pec-overlay.pec-draggable:active {
+  cursor: grabbing;
+}
+
+/* Theme: light */
+.pec-overlay.pec-theme-light {
+  --pec-bg: #ffffff;
+  --pec-fg: #292929;
+  --pec-border: rgba(0, 0, 0, 0.08);
+  --pec-swatch-bg: #e6e6e6;
+}
+
+/* Theme: dark */
+.pec-overlay.pec-theme-dark {
+  --pec-bg: #000000;
+  --pec-fg: #dbdbdb;
+  --pec-border: rgba(255, 255, 255, 0.08);
+  --pec-swatch-bg: #2a2a2a;
+}
+
+/* Chip header */
+.pec-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 6px 12px;
+  background: var(--pec-bg);
+  color: var(--pec-fg);
+  border: 1px solid var(--pec-border);
+  border-radius: 999px;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.pec-chip svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Card with label + inner image swatch */
+.pec-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: var(--pec-bg);
+  color: var(--pec-fg);
+  border: 1px solid var(--pec-border);
+  border-radius: 12px;
+  min-width: 160px;
+}
+
+.pec-card .pec-label {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.pec-card .pec-swatch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 96px;
+  border-radius: 8px;
+  background: var(--pec-swatch-bg);
+}
+
+.pec-card .pec-swatch svg {
+  width: 24px;
+  height: 24px;
+  opacity: 0.5;
+}
