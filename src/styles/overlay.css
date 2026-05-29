@@ -65,29 +65,29 @@
   --pec-scale: 0.85;
   gap: 8px;
 }
-.pec-overlay.pec-size-s .pec-chip { border-radius: 8px; }
-.pec-overlay.pec-size-s .pec-card { border-radius: 8px; }
+.pec-overlay.pec-size-s .pec-chip { border-radius: 6px; }
+.pec-overlay.pec-size-s .pec-card { border-radius: 6px; }
 
 .pec-overlay.pec-size-m {
   --pec-scale: 1;
   gap: 10px;
 }
-.pec-overlay.pec-size-m .pec-chip { border-radius: 9px; }
-.pec-overlay.pec-size-m .pec-card { border-radius: 9px; }
+.pec-overlay.pec-size-m .pec-chip { border-radius: 7px; }
+.pec-overlay.pec-size-m .pec-card { border-radius: 7px; }
 
 .pec-overlay.pec-size-l {
   --pec-scale: 1.13;
   gap: 12px;
 }
-.pec-overlay.pec-size-l .pec-chip { border-radius: 9px; }
-.pec-overlay.pec-size-l .pec-card { border-radius: 10px; }
+.pec-overlay.pec-size-l .pec-chip { border-radius: 7px; }
+.pec-overlay.pec-size-l .pec-card { border-radius: 8px; }
 
 .pec-overlay.pec-size-xl {
   --pec-scale: 1.27;
   gap: 14px;
 }
-.pec-overlay.pec-size-xl .pec-chip { border-radius: 9px; }
-.pec-overlay.pec-size-xl .pec-card { border-radius: 10px; }
+.pec-overlay.pec-size-xl .pec-chip { border-radius: 7px; }
+.pec-overlay.pec-size-xl .pec-card { border-radius: 8px; }
 
 /* --- Chip --- */
 .pec-chip {
