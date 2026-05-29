@@ -92,19 +92,19 @@ export function EmbedControlPanel({ onClearSelection }: Props) {
               Zoom
               <input
                 type="range"
-                min={minScale}
-                max={Math.max(minScale * 4, 4)}
+                min={1}
+                max={4}
                 step={0.01}
-                value={Math.max(state.imageTransform.scale, minScale)}
+                value={Math.max(state.imageTransform.scale / minScale, 1)}
                 onChange={(e) =>
                   dispatch({
                     type: "setImageTransform",
-                    scale: Number(e.target.value),
+                    scale: Number(e.target.value) * minScale,
                   })
                 }
               />
               <span className="value">
-                {(state.imageTransform.scale * 100).toFixed(0)}%
+                {((state.imageTransform.scale / minScale) * 100).toFixed(0)}%
               </span>
             </label>
             <p className="hint">Drag the image to pan.</p>

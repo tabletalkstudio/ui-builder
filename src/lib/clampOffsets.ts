@@ -31,3 +31,29 @@ export function minScaleForCover(
   if (imgW === 0 || imgH === 0) return 1;
   return Math.max(frameW / imgW, frameH / imgH);
 }
+
+/**
+ * Compute the cover-fit transform that makes a `naturalW × naturalH` image
+ * appear at `frameW × frameH` size, centered. This is the closest uniform-
+ * scale approximation of the browser's default `<img>` rendering ("fill"
+ * stretch), and exactly matches `object-fit: cover` when aspect ratios match.
+ *
+ * Use this as the initial transform when wrapping a host-page image so the
+ * visual on click matches the visual before click.
+ */
+export function coverFitTransform(
+  naturalW: number,
+  naturalH: number,
+  frameW: number,
+  frameH: number,
+): { offsetX: number; offsetY: number; scale: number } {
+  if (naturalW === 0 || naturalH === 0) {
+    return { offsetX: 0, offsetY: 0, scale: 1 };
+  }
+  const scale = Math.max(frameW / naturalW, frameH / naturalH);
+  return {
+    offsetX: (frameW - naturalW * scale) / 2,
+    offsetY: (frameH - naturalH * scale) / 2,
+    scale,
+  };
+}

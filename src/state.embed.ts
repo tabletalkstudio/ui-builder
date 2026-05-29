@@ -6,6 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { createElement } from "react";
+import { coverFitTransform } from "./lib/clampOffsets";
 
 export type Theme = "light" | "dark";
 
@@ -78,9 +79,18 @@ export function embedReducer(
       return {
         ...state,
         selection: action.selection,
-        // Reset per-selection transforms when changing image
+        // Reset per-selection transforms when changing image. Start at the
+        // cover-fit transform so the image looks identical to how it was
+        // already rendered on the host page (no zoom/crop jump on click).
         swapSrc: null,
-        imageTransform: { offsetX: 0, offsetY: 0, scale: 1 },
+        imageTransform: action.selection
+          ? coverFitTransform(
+              action.selection.naturalW,
+              action.selection.naturalH,
+              action.selection.displayW,
+              action.selection.displayH,
+            )
+          : { offsetX: 0, offsetY: 0, scale: 1 },
         frame: { borderRadius: state.frame.borderRadius },
       };
     case "setSwapSrc":
