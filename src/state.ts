@@ -9,6 +9,20 @@ import { createElement } from "react";
 
 export type Theme = "light" | "dark";
 export type OverlaySize = "XL" | "L" | "M" | "S";
+export type SecondaryType =
+  | "single-image"
+  | "signature"
+  | "images"
+  | "layers"
+  | "text-prompt";
+
+export const DEFAULT_CHIP_TEXT: Record<SecondaryType, string> = {
+  "single-image": "Primary container",
+  signature: "Sign PDF",
+  images: "Images",
+  layers: "Layers",
+  "text-prompt": "Generate",
+};
 
 export type ComposerState = {
   image: {
@@ -36,6 +50,7 @@ export type ComposerState = {
     labelText: string;
     theme: Theme;
     size: OverlaySize;
+    secondaryType: SecondaryType;
   };
 };
 
@@ -52,6 +67,7 @@ export const initialState: ComposerState = {
     labelText: "Text",
     theme: "light",
     size: "M",
+    secondaryType: "single-image",
   },
 };
 
@@ -110,8 +126,20 @@ export function reducer(state: ComposerState, action: Action): ComposerState {
           scale: action.scale ?? state.imageTransform.scale,
         },
       };
-    case "setOverlay":
-      return { ...state, overlay: { ...state.overlay, ...action.patch } };
+    case "setOverlay": {
+      let patch = action.patch;
+      if (
+        patch.secondaryType &&
+        patch.secondaryType !== state.overlay.secondaryType &&
+        patch.chipText === undefined
+      ) {
+        patch = {
+          ...patch,
+          chipText: DEFAULT_CHIP_TEXT[patch.secondaryType],
+        };
+      }
+      return { ...state, overlay: { ...state.overlay, ...patch } };
+    }
     case "reset":
       return initialState;
     default:

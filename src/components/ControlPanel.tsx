@@ -149,6 +149,48 @@ export function ControlPanel() {
           />
         </label>
         <label>
+          Secondary type
+          <select
+            value={overlay.secondaryType}
+            onChange={(e) =>
+              dispatch({
+                type: "setOverlay",
+                patch: {
+                  secondaryType: e.target.value as
+                    | "single-image"
+                    | "signature"
+                    | "images"
+                    | "layers"
+                    | "text-prompt",
+                },
+              })
+            }
+          >
+            <option value="single-image">Single image</option>
+            <option value="signature">Signature</option>
+            <option value="images">Images</option>
+            <option value="layers">Layers</option>
+            <option value="text-prompt">Text prompt</option>
+          </select>
+        </label>
+        <label>
+          Size
+          <select
+            value={overlay.size}
+            onChange={(e) =>
+              dispatch({
+                type: "setOverlay",
+                patch: { size: e.target.value as "XL" | "L" | "M" | "S" },
+              })
+            }
+          >
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+          </select>
+        </label>
+        <label>
           Theme
           <select
             value={overlay.theme}

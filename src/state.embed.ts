@@ -9,6 +9,21 @@ import { createElement } from "react";
 import { coverFitTransform } from "./lib/clampOffsets";
 
 export type Theme = "light" | "dark";
+export type OverlaySize = "XL" | "L" | "M" | "S";
+export type SecondaryType =
+  | "single-image"
+  | "signature"
+  | "images"
+  | "layers"
+  | "text-prompt";
+
+export const DEFAULT_CHIP_TEXT: Record<SecondaryType, string> = {
+  "single-image": "Primary container",
+  signature: "Sign PDF",
+  images: "Images",
+  layers: "Layers",
+  "text-prompt": "Generate",
+};
 
 export type Selection = {
   el: HTMLImageElement;
@@ -39,6 +54,8 @@ export type EmbedState = {
     chipText: string;
     labelText: string;
     theme: Theme;
+    size: OverlaySize;
+    secondaryType: SecondaryType;
   };
 };
 
@@ -56,6 +73,8 @@ export const initialEmbedState: EmbedState = {
     chipText: "Primary container",
     labelText: "Text",
     theme: "light",
+    size: "M",
+    secondaryType: "single-image",
   },
 };
 
@@ -114,8 +133,22 @@ export function embedReducer(
           scale: action.scale ?? state.imageTransform.scale,
         },
       };
-    case "setOverlay":
-      return { ...state, overlay: { ...state.overlay, ...action.patch } };
+    case "setOverlay": {
+      let patch = action.patch;
+      // When the user changes secondary type, reset the chip text to the
+      // type's default (unless the patch also explicitly sets chipText).
+      if (
+        patch.secondaryType &&
+        patch.secondaryType !== state.overlay.secondaryType &&
+        patch.chipText === undefined
+      ) {
+        patch = {
+          ...patch,
+          chipText: DEFAULT_CHIP_TEXT[patch.secondaryType],
+        };
+      }
+      return { ...state, overlay: { ...state.overlay, ...patch } };
+    }
     case "setSidebar":
       return { ...state, sidebar: { ...state.sidebar, ...action.patch } };
     default:
