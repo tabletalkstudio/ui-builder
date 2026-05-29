@@ -38,6 +38,10 @@
       padding: 24px;
       margin-bottom: 24px;
     }
+    .install-card.is-stage {
+      border-color: #f5a623;
+      background: #fffaf0;
+    }
     .install-card h2 {
       font-size: 14px;
       text-transform: uppercase;
@@ -45,7 +49,20 @@
       color: #666;
       font-weight: 600;
       margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .badge-prod { background: #1a1a1a; color: #ffffff; }
+    .badge-stage { background: #f5a623; color: #1a1a1a; }
     .bookmarklet-link {
       display: inline-block;
       padding: 10px 18px;
@@ -59,6 +76,11 @@
     }
     .bookmarklet-link:active { cursor: grabbing; }
     .bookmarklet-link:hover { background: #333; }
+    .bookmarklet-link.stage {
+      background: #f5a623;
+      color: #1a1a1a;
+    }
+    .bookmarklet-link.stage:hover { background: #e0951b; }
     .hint {
       margin: 12px 0 0;
       font-size: 13px;
@@ -90,6 +112,7 @@
       word-break: break-all;
       overflow-wrap: break-word;
     }
+    .snippet.stage { background: #3a2f00; color: #ffe9a0; }
     .copy-btn {
       margin-top: 8px;
       padding: 6px 12px;
@@ -116,48 +139,71 @@
   <div class="wrap">
     <h1>Install the UI Builder bookmarklet</h1>
     <p class="lede">
-      Drag the button below to your bookmarks bar. Then click it on any web page
-      to open the editor as an overlay on that page.
+      Drag a button below to your bookmarks bar. Then click it on any web page
+      to open the editor as a sidebar on that page.
     </p>
 
     <div class="install-card">
-      <h2>1. Drag this to your bookmarks bar</h2>
+      <h2><span class="badge badge-prod">PROD</span> 1. Drag this to your bookmarks bar</h2>
       <a
         class="bookmarklet-link"
         href="javascript:(()=>{const s=document.createElement('script');s.src='https://ui-builder-eosin.vercel.app/embed.js';document.head.appendChild(s)})()"
         onclick="event.preventDefault(); alert('Don’t click — drag this link to your bookmarks bar.');"
       >▤ UI Builder</a>
       <p class="hint">
-        Drag with your mouse onto the bookmarks bar (View → Show Bookmarks Bar
-        in Chrome/Safari if it's hidden). Clicking the button here doesn't do
-        anything useful — it has to live in your bookmarks to work.
+        The stable, production version. Tracks the <code>main</code> branch.
+        Drag onto the bookmarks bar (View → Show Bookmarks Bar in Chrome/Safari
+        if it's hidden). Clicking the button here doesn't do anything useful —
+        it has to live in your bookmarks to work.
+      </p>
+    </div>
+
+    <div class="install-card is-stage">
+      <h2><span class="badge badge-stage">STAGE</span> Test the next version</h2>
+      <a
+        class="bookmarklet-link stage"
+        href="javascript:(()=>{const s=document.createElement('script');s.src='https://ui-builder-stage.vercel.app/embed.js';document.head.appendChild(s)})()"
+        onclick="event.preventDefault(); alert('Don’t click — drag this link to your bookmarks bar.');"
+      >▤ UI Builder · Stage</a>
+      <p class="hint">
+        Tracks the <code>stage</code> branch — unreleased changes for testing
+        before they merge to prod. Save it as a separate bookmark from the prod
+        one so you can compare. Expect rough edges.
       </p>
     </div>
 
     <div class="install-card">
-      <h2>2. Use it</h2>
+      <h2>How to use it</h2>
       <ol>
-        <li>Navigate to any web page.</li>
+        <li>Navigate to any web page with images.</li>
         <li>Click the <strong>UI Builder</strong> bookmark in your bookmarks bar.</li>
-        <li>The editor mounts as an overlay. Click it again to toggle visibility.</li>
-        <li>Click the ✕ in the top-right to remove the overlay entirely.</li>
+        <li>A sidebar appears on the right; the host page shifts left.</li>
+        <li>Click any <code>&lt;img&gt;</code> on the page to start editing it in place.</li>
+        <li>Zoom, pan, set border-radius, position the overlay, optionally swap the image.</li>
+        <li>Hit <strong>Copy HTML + CSS snippet</strong> to grab the markup for your codebase.</li>
+        <li>Click the ✕ to remove the sidebar entirely.</li>
       </ol>
     </div>
 
     <div class="install-card">
       <h2>Can't drag? Add it manually</h2>
-      <ol>
-        <li>Open your bookmarks manager (Cmd/Ctrl + Shift + O in Chrome).</li>
-        <li>Add a new bookmark. Name: <code>UI Builder</code>.</li>
-        <li>For the URL, paste this exactly:</li>
-      </ol>
-      <div class="snippet" id="snippet">javascript:(()=>{const s=document.createElement('script');s.src='https://ui-builder-eosin.vercel.app/embed.js';document.head.appendChild(s)})()</div>
-      <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('snippet').textContent).then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy snippet',1500)})">Copy snippet</button>
+      <p class="hint" style="margin-top:0">
+        Open your bookmarks manager (Cmd/Ctrl + Shift + O in Chrome), add a new
+        bookmark, and paste one of these into the URL field:
+      </p>
+      <h3 style="font-size:12px;color:#666;margin:16px 0 6px;text-transform:uppercase;letter-spacing:.5px">Prod</h3>
+      <div class="snippet" id="snippet-prod">javascript:(()=>{const s=document.createElement('script');s.src='https://ui-builder-eosin.vercel.app/embed.js';document.head.appendChild(s)})()</div>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('snippet-prod').textContent).then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy prod snippet',1500)})">Copy prod snippet</button>
+
+      <h3 style="font-size:12px;color:#666;margin:16px 0 6px;text-transform:uppercase;letter-spacing:.5px">Stage</h3>
+      <div class="snippet stage" id="snippet-stage">javascript:(()=>{const s=document.createElement('script');s.src='https://ui-builder-stage.vercel.app/embed.js';document.head.appendChild(s)})()</div>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('snippet-stage').textContent).then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy stage snippet',1500)})">Copy stage snippet</button>
+
       <p class="hint">
         Important: when you paste, make sure your browser keeps the
         <code>javascript:</code> prefix. Some browsers strip it for security if
-        you paste into the address bar directly. The bookmarks manager keeps
-        it intact.
+        you paste into the address bar directly. The bookmarks manager keeps it
+        intact.
       </p>
     </div>
 
@@ -166,15 +212,15 @@
       <p class="hint" style="margin-top:0">
         Sites with strict <code>Content-Security-Policy</code> (Google, GitHub,
         banks, internal Adobe apps) will refuse to load the script. Check the
-        browser console for a CSP error. Try a different site to rule out
-        bugs vs. policy.
+        browser console for a CSP error. Try a different site to rule out bugs
+        vs. policy.
       </p>
     </div>
 
     <p class="small">
       Tool source: <a class="editor-link" href="https://github.com/tabletalkstudio/ui-builder">github.com/tabletalkstudio/ui-builder</a>
-      ·
-      Hosted editor: <a class="editor-link" href="https://ui-builder-eosin.vercel.app/">ui-builder-eosin.vercel.app</a>
+      · Prod: <a class="editor-link" href="https://ui-builder-eosin.vercel.app/">ui-builder-eosin.vercel.app</a>
+      · Stage: <a class="editor-link" href="https://ui-builder-stage.vercel.app/">ui-builder-stage.vercel.app</a>
     </p>
   </div>
 </body>
