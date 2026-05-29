@@ -20,6 +20,8 @@ export type OverlayProps = {
   secondaryType: SecondaryType;
   /** When false, only the chip renders (no card below). */
   cardVisible: boolean;
+  /** Whether to apply the soft drop shadow on the overlay. */
+  shadowEnabled: boolean;
   onMove: (x: number, y: number) => void;
 };
 
@@ -144,6 +146,7 @@ export function Overlay({
   size,
   secondaryType,
   cardVisible,
+  shadowEnabled,
   onMove,
 }: OverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -191,7 +194,7 @@ export function Overlay({
   return (
     <div
       ref={overlayRef}
-      className={`pec-overlay pec-draggable pec-theme-${theme} pec-size-${size.toLowerCase()} pec-type-${secondaryType}`}
+      className={`pec-overlay pec-draggable pec-theme-${theme} pec-size-${size.toLowerCase()} pec-type-${secondaryType}${shadowEnabled ? " pec-shadow" : ""}`}
       style={{ left: x, top: y }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}

@@ -122,6 +122,20 @@ export function ControlPanel() {
           />
           Show card (second box)
         </label>
+        <label className="row">
+          <input
+            type="checkbox"
+            checked={overlay.shadowEnabled}
+            disabled={!overlay.visible}
+            onChange={(e) =>
+              dispatch({
+                type: "setOverlay",
+                patch: { shadowEnabled: e.target.checked },
+              })
+            }
+          />
+          Drop shadow
+        </label>
         <label>
           Chip text
           <input

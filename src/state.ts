@@ -44,6 +44,7 @@ export type ComposerState = {
   overlay: {
     visible: boolean;
     cardVisible: boolean;
+    shadowEnabled: boolean;
     x: number;
     y: number;
     chipText: string;
@@ -61,6 +62,7 @@ export const initialState: ComposerState = {
   overlay: {
     visible: true,
     cardVisible: true,
+    shadowEnabled: true,
     x: 16,
     y: 16,
     chipText: "Primary container",

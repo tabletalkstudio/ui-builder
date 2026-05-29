@@ -27,9 +27,12 @@
   flex-direction: column;
   gap: 14px;
   user-select: none;
-  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.25));
   /* Per-size scale applied via pec-size-* class below. */
   --pec-scale: 1;
+}
+
+.pec-overlay.pec-shadow {
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.25));
 }
 
 .pec-overlay.pec-draggable {

@@ -49,6 +49,7 @@ export type EmbedState = {
   overlay: {
     visible: boolean;
     cardVisible: boolean;
+    shadowEnabled: boolean;
     x: number;
     y: number;
     chipText: string;
@@ -68,6 +69,7 @@ export const initialEmbedState: EmbedState = {
   overlay: {
     visible: true,
     cardVisible: true,
+    shadowEnabled: true,
     x: 12,
     y: 12,
     chipText: "Primary container",

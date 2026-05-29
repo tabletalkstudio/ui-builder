@@ -159,6 +159,20 @@ export function EmbedControlPanel({ onClearSelection }: Props) {
               />
               Show card (second box)
             </label>
+            <label className="row">
+              <input
+                type="checkbox"
+                checked={state.overlay.shadowEnabled}
+                disabled={!state.overlay.visible}
+                onChange={(e) =>
+                  dispatch({
+                    type: "setOverlay",
+                    patch: { shadowEnabled: e.target.checked },
+                  })
+                }
+              />
+              Drop shadow
+            </label>
             <label>
               Chip text
               <input

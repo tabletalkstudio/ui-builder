@@ -7,6 +7,7 @@
 export type SerializedOverlay = {
   visible: boolean;
   cardVisible: boolean;
+  shadowEnabled: boolean;
   x: number;
   y: number;
   chipText: string;
@@ -88,13 +89,14 @@ export function renderOverlayHtml(
   const sizeClass = `pec-size-${o.size.toLowerCase()}`;
   const themeClass = `pec-theme-${o.theme}`;
   const typeClass = `pec-type-${o.secondaryType}`;
+  const shadowClass = o.shadowEnabled ? " pec-shadow" : "";
   const positionAttr = opts.positionInline
     ? ` style="position:absolute;left:${o.x}px;top:${o.y}px;"`
     : "";
   const cardBlock = o.cardVisible
     ? `\n  <div class="pec-card pec-card--${o.secondaryType}">${cardInner(o.secondaryType, o.labelText)}</div>`
     : "";
-  return `<div class="pec-overlay ${themeClass} ${sizeClass} ${typeClass}"${positionAttr}>
+  return `<div class="pec-overlay ${themeClass} ${sizeClass} ${typeClass}${shadowClass}"${positionAttr}>
   <div class="pec-chip">${chipIcon(o.secondaryType)}<span>${escapeHtml(o.chipText)}</span></div>${cardBlock}
 </div>`;
 }

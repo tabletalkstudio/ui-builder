@@ -135,6 +135,7 @@ export function HostImageEditor() {
       size={state.overlay.size}
       secondaryType={state.overlay.secondaryType}
       cardVisible={state.overlay.cardVisible}
+      shadowEnabled={state.overlay.shadowEnabled}
       onMove={(nx, ny) =>
         dispatch({ type: "setOverlay", patch: { x: nx, y: ny } })
       }
